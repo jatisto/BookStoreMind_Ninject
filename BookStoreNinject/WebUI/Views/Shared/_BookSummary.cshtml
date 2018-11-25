@@ -1,0 +1,26 @@
+﻿@model Domain.Entities.Book
+
+<div class="well">
+    <div class="row">
+        <div class="col-xs-10">
+            <h3>
+                <strong>@Model.Name</strong>
+            </h3>
+            <h4>
+                <strong>@Model.Author</strong>
+            </h4>
+        </div>
+        <div class="col-xs-2">
+            <h4>
+                <strong class="pull-right label label-primary">
+                    @Model.Price.ToString("# сом")
+                </strong>
+            </h4>
+        </div>
+
+    </div>
+    <span class="lead">
+        @Model.Description
+    </span>
+</div>
+<hr/>
