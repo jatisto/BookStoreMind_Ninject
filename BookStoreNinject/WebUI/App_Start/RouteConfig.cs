@@ -13,16 +13,39 @@ namespace WebUI
         {
             routes.IgnoreRoute("{resource}.axd/{*pathInfo}");
 
+            // (/) Выводит таблицу товаров всех категорий
+            routes.MapRoute(
+                null,
+                "",
+                new { controller = "Books", action = "List", genre = (string)null, page = 1 }
+            );
+
+            // (/PageX) Выводит указанную строницу отображая все товары
             routes.MapRoute(
                 name: null,
                 url: "Page{page}",
-                defaults: new {controller = "Books", action = "List"}
+                defaults: new { controller = "Books", action = "List", genre = (string)null },
+                constraints: new { page = @"\d+" }
+            );
+
+            // (/Программирование) Отображает первую строницу элементов указанной категории
+            routes.MapRoute(
+                null,
+                "{genre}",
+                new { controller = "Books", action = "List", page = 1 }
+            );
+
+            // (/Программирование/PageX) Отображает заданную страницу элементов указанной категорий 
+            routes.MapRoute(
+                null,
+                "{genre}/Page{page}",
+                new { controller = "Books", action = "List" },
+                new { page = @"\d+" }
             );
 
             routes.MapRoute(
-                name: "Default",
-                url: "{controller}/{action}/{id}",
-                defaults: new {controller = "Books", action = "List", id = UrlParameter.Optional}
+                null,
+                "{controller}/{action}"
             );
         }
     }
