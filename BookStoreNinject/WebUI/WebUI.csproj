@@ -175,6 +175,8 @@
     <Compile Include="App_Start\Ninject.Web.Common.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Controllers\BooksController.cs" />
+    <Compile Include="Controllers\CardController.cs" />
+    <Compile Include="Controllers\CardIndexVM.cs" />
     <Compile Include="Controllers\NavController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
@@ -196,6 +198,7 @@
     <Content Include="Views\Shared\_BookSummary.cshtml" />
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Nav\Menu.cshtml" />
+    <Content Include="Views\Card\Index.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>
