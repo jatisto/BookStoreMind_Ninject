@@ -16,16 +16,16 @@ namespace WebUI.Controllers
             this.repository = repo;
         }
 
-        public ViewResult Index(string returnUrl)
+        public ViewResult Index(Card card, string returnUrl)
         {
             return View(new CardIndexVM()
             {
-                Card = GetCard(),
+                Card = card,
                 ReturnUrl = returnUrl
             });
         }
 
-        public Card GetCard()
+        /*public Card GetCard()
         {
             Card card = (Card)Session["Card"];
             if (card == null)
@@ -36,23 +36,23 @@ namespace WebUI.Controllers
             }
 
             return card;
-        }
+        }*/
 
-        public RedirectToRouteResult AddToCard(int bookId, string returnUrl)
+        public RedirectToRouteResult AddToCard(Card card, int bookId, string returnUrl)
         {
             Book book = repository.Books
                 .FirstOrDefault(b => b.BookId == bookId);
 
             if (book != null)
             {
-                GetCard().AddItem(book, 1);
+                card.AddItem(book, 1);
             }
 
             return RedirectToAction("Index", new { returnUrl });
         }
 
 
-        public RedirectToRouteResult RemoveFormCard(int bookId, string returnUrl)
+        public RedirectToRouteResult RemoveFormCard(Card card, int bookId, string returnUrl)
         {
             Book book = repository.Books
                 .Where(b => b.BookId == bookId)
@@ -60,7 +60,7 @@ namespace WebUI.Controllers
 
             if (book != null)
             {
-                GetCard().RemoveItem(book);
+                card.RemoveItem(book);
             }
 
             return RedirectToAction("Index", new { returnUrl });
