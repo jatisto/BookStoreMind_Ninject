@@ -66,5 +66,10 @@ namespace WebUI.Controllers
             return RedirectToAction("Index", new { returnUrl });
         }
 
+        public PartialViewResult Summary(Card card)
+        {
+            return PartialView(card);
+        }
+
     }
 }

@@ -184,6 +184,7 @@
     <Compile Include="HtmlHelpers\PagingHelper.cs" />
     <Compile Include="Infrastructure\NinjectDependencyResolver.cs" />
     <Compile Include="Models\BooksListVM.cs" />
+    <Compile Include="Models\CardModelsBinder.cs" />
     <Compile Include="Models\PagingInfo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
@@ -199,6 +200,7 @@
     <Content Include="Views\Shared\Error.cshtml" />
     <Content Include="Views\Nav\Menu.cshtml" />
     <Content Include="Views\Card\Index.cshtml" />
+    <Content Include="Views\Card\Summary.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

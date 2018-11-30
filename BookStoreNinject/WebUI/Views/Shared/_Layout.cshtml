@@ -6,11 +6,19 @@
     <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
     <link href="~/Content/bootstrap-theme.min.css" rel="stylesheet" />
     <link href="~/Content/Site.css" rel="stylesheet" />
+    <style>
+        .navbar-right {
+            float: right !important;
+            margin-right: 15px;
+            margin-left: 15px;
+        }
+    </style>
     <title>@ViewBag.Title</title>
 </head>
 <body>
 <div class="navbar navbar-inverse" role="navigation">
     <a class="navbar-brand" href="#">BookStoreNinject</a>
+    @Html.Action("Summary", "Card")
 </div>
 <div class="row panel">
     <div id="genres" class="col-xs-3">

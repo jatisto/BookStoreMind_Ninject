@@ -1,8 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Web.Mvc;
+using Domain.Abstract;
 using Domain.Entities;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
+using Moq;
+using WebUI.Controllers;
 
 namespace UnitTests
 {
@@ -108,6 +112,63 @@ namespace UnitTests
 
             // Утвержение
             Assert.AreEqual(card.Lines.Count(), 0);
+        }
+
+
+        [TestMethod]
+        public void Can_Add_Too_Card()
+        {
+            // Организация
+            Mock<IBookRepository> mock = new Mock<IBookRepository>();
+            mock.Setup(x => x.Books).Returns(new List<Book>()
+            {
+                new Book(){BookId = 1, Name = "Book1", Genre = "Genre1"}
+            });
+            Card card = new Card();
+
+            CardController controller = new CardController(mock.Object);
+            // Действие
+            controller.AddToCard(card, 1, null);
+
+            // Утвержение
+            Assert.AreEqual(card.Lines.Count(), 1);
+            Assert.AreEqual(card.Lines.ToList()[0].Book.BookId, 1);
+        }
+
+
+        [TestMethod]
+        public void Adding_Book_To_Card_Goes_To_Card_Screen()
+        {
+            // Организация
+            Mock<IBookRepository> mock = new Mock<IBookRepository>();
+            mock.Setup(x => x.Books).Returns(new List<Book>()
+            {
+                new Book(){BookId = 1, Name = "Book1", Genre = "Genre1"}
+            });
+            Card card = new Card();
+
+            CardController controller = new CardController(mock.Object);
+            // Действие
+             RedirectToRouteResult result = controller.AddToCard(card, 1, "myUrl");
+
+            // Утвержение
+            Assert.AreEqual(result.RouteValues["action"], "Index");
+            Assert.AreEqual(result.RouteValues["returnUrl"], "myUrl");
+        }
+
+        [TestMethod]
+        public void Can_View_Card_Conteins()
+        {
+            // Организация
+            Card card = new Card();
+
+            CardController target = new CardController(null);
+            // Действие
+            CardIndexVM result = (CardIndexVM)target.Index(card,"myUrl").ViewData.Model;
+
+            // Утвержение
+            Assert.AreEqual(result.Card, card);
+            Assert.AreEqual(result.ReturnUrl, "myUrl");
         }
     }
 }
