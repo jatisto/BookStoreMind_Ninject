@@ -1,0 +1,43 @@
+﻿@model Domain.Entities.ShippingDetails
+
+@{
+    ViewBag.Title = "BookStore2 - форма заказа";
+}
+
+<h2>Оформить заказ</h2>
+
+@using (Html.BeginForm())
+{
+    @Html.ValidationSummary()
+    <h3>Данные</h3>
+    <div class="form-group">
+        <label>Ваше имя:</label>
+        @Html.TextBoxFor(x => x.Name, new { @class = "form-control" })
+    </div>
+
+    foreach (var property in ViewData.ModelMetadata.Properties)
+    {
+        if (property.PropertyName != "Name" && property.PropertyName != "GiftWrap")
+        {
+            <div class="form-group">
+                <label>
+                    @(property.DisplayName ?? property.PropertyName)
+                </label>
+                @Html.TextBox(property.PropertyName, null, new{ @class="form-control" })
+            </div>
+        }
+    }
+
+    <h3>Опции</h3>
+    <div class="form-group">
+        <label>
+            @Html.EditorFor(x => x.GiftWrap)
+            Использовать падарачную упаковку?
+        </label>
+    </div>
+
+    <div class="text-center">
+        <input type="submit" class="btn btn-primary" value="Обработать заказ"/>
+    </div>
+}
+

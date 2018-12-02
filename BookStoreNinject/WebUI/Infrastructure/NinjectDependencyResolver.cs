@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Web.Mvc;
 using Domain.Abstract;
 using Domain.Concrete;
@@ -30,6 +31,13 @@ namespace WebUI.Infrastructure
             });
             kernel.Bind<IBookRepository>().ToConstant(mock.Object);*/
             kernel.Bind<IBookRepository>().To<EFBookRepository>();
+
+            EmailSettings emailSettings = new EmailSettings()
+            {
+                WriteAsFile = bool.Parse(ConfigurationManager.AppSettings["Email.WriteAsFile"] ?? "false")
+            };
+
+            kernel.Bind<IOrderProcessor>().To<EmailOrderProcessor>();
 
         }
 

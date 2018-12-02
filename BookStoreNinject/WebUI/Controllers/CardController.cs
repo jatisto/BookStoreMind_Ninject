@@ -71,5 +71,10 @@ namespace WebUI.Controllers
             return PartialView(card);
         }
 
+        public ViewResult Checkout(Card card, ShippingDetails shippingDetails)
+        {
+            return View(new ShippingDetails());
+        }
+
     }
 }
