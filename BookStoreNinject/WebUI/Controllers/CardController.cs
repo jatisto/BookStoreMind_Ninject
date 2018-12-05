@@ -11,9 +11,11 @@ namespace WebUI.Controllers
     public class CardController : Controller
     {
         private IBookRepository repository;
-        public CardController(IBookRepository repo)
+        private IOrderProcessor orderProcessor;
+        public CardController(IBookRepository repo, IOrderProcessor order)
         {
             this.repository = repo;
+            orderProcessor = order;
         }
 
         public ViewResult Index(Card card, string returnUrl)
@@ -71,9 +73,30 @@ namespace WebUI.Controllers
             return PartialView(card);
         }
 
-        public ViewResult Checkout(Card card, ShippingDetails shippingDetails)
+        public ViewResult Checkout()
         {
             return View(new ShippingDetails());
+        }
+
+        [HttpPost]
+        public ViewResult Checkout(Card card, ShippingDetails shippingDetails)
+        {
+            if (card.Lines.Count() == 0)
+            {
+                ModelState.AddModelError("", "Извениет но карзина пустя!");
+            }
+
+            if (ModelState.IsValid)
+            {
+                orderProcessor.ProcessOrder(card, shippingDetails);
+                card.Clear();
+                return View("Completed");
+            }
+            else
+            {
+                return View(new ShippingDetails());
+            }
+            
         }
 
     }

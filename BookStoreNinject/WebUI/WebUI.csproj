@@ -202,6 +202,7 @@
     <Content Include="Views\Card\Index.cshtml" />
     <Content Include="Views\Card\Summary.cshtml" />
     <Content Include="Views\Card\Checkout.cshtml" />
+    <Content Include="Views\Card\Completed.cshtml" />
     <None Include="Web.Debug.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

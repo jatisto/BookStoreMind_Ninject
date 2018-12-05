@@ -126,7 +126,7 @@ namespace UnitTests
             });
             Card card = new Card();
 
-            CardController controller = new CardController(mock.Object);
+            CardController controller = new CardController(mock.Object, null);
             // Действие
             controller.AddToCard(card, 1, null);
 
@@ -147,7 +147,7 @@ namespace UnitTests
             });
             Card card = new Card();
 
-            CardController controller = new CardController(mock.Object);
+            CardController controller = new CardController(mock.Object, null);
             // Действие
              RedirectToRouteResult result = controller.AddToCard(card, 1, "myUrl");
 
@@ -162,13 +162,65 @@ namespace UnitTests
             // Организация
             Card card = new Card();
 
-            CardController target = new CardController(null);
+            CardController target = new CardController(null, null);
             // Действие
             CardIndexVM result = (CardIndexVM)target.Index(card,"myUrl").ViewData.Model;
 
             // Утвержение
             Assert.AreEqual(result.Card, card);
             Assert.AreEqual(result.ReturnUrl, "myUrl");
+        }
+
+        [TestMethod]
+        public void Cannot_Checkout_Empty_Card()
+        {
+            Mock<IOrderProcessor> mock = new Mock<IOrderProcessor>();
+            Card card = new Card();
+            ShippingDetails shippingDetails = new ShippingDetails();
+
+            CardController controller = new CardController(null, mock.Object);
+
+            ViewResult result = controller.Checkout(card, shippingDetails);
+            mock.Verify(m => m.ProcessOrder(It.IsAny<Card>(), It.IsAny<ShippingDetails>()), Times.Never);
+
+            Assert.AreEqual("", result.ViewName);
+            Assert.AreEqual(false, result.ViewData.ModelState.IsValid);
+
+        }
+
+        [TestMethod]
+        public void Cannot_Checkout_Invalid_ShippingDetails()
+        {
+            Mock<IOrderProcessor> mock = new Mock<IOrderProcessor>();
+            Card card = new Card();
+            card.AddItem(new Book(), 1);
+
+            CardController controller = new CardController(null, mock.Object);
+            controller.ModelState.AddModelError("error","error");
+
+            ViewResult result = controller.Checkout(card, new ShippingDetails());
+            mock.Verify(m => m.ProcessOrder(It.IsAny<Card>(), It.IsAny<ShippingDetails>()), Times.Never);
+
+            Assert.AreEqual("", result.ViewName);
+            Assert.AreEqual(false, result.ViewData.ModelState.IsValid);
+
+        }
+
+        [TestMethod]
+        public void Cannot_Checkout_Submit_Order()
+        {
+            Mock<IOrderProcessor> mock = new Mock<IOrderProcessor>();
+            Card card = new Card();
+            card.AddItem(new Book(), 1);
+
+            CardController controller = new CardController(null, mock.Object);
+
+            ViewResult result = controller.Checkout(card, new ShippingDetails());
+            mock.Verify(m => m.ProcessOrder(It.IsAny<Card>(), It.IsAny<ShippingDetails>()), Times.Once());
+
+            Assert.AreEqual("Completed", result.ViewName);
+            Assert.AreEqual(true, result.ViewData.ModelState.IsValid);
+
         }
     }
 }
